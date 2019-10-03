@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TareaExtraClase3</string>
+    <string name="selction">Selction</string>
+    <string name="bubble">bubble</string>
+    <string name="insertion">insertion</string>
+    <string name="iteracion_999">Iteracion #999</string>
+    <string name="_10_100_1000_15_25">10 ,100, 1000, 15, 25</string>
+</resources>
