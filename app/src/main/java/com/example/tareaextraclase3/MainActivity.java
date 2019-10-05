@@ -29,10 +29,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sortSelection(View v){
+        iteracion.setText("");
         selectionSort(randomArray(10));
     }
 
     public void sortBubble(View v){
+        iteracion.setText("");
         bubbleSort(randomArray(10));
     }
 
@@ -56,12 +58,16 @@ public class MainActivity extends AppCompatActivity {
             for (int j = i + 1; j < arr.length; j++){
                 comparisons++;
                 if (arr[j] < arr[index]){
-                    index = j;}}
-            swaps++;
-            int smallerNumber = arr[index];
-            arr[index] = arr[i];
-            arr[i] = smallerNumber;
-            setIterationTexts(i, arr);
+                    index = j;
+                }
+            }
+            if(index !=  i){
+                swaps++;
+                int smallerNumber = arr[index];
+                arr[index] = arr[i];
+                arr[i] = smallerNumber;
+            }
+            setIterationTexts(i+1, arr);
         }
         setSwapComparisonText(swaps, comparisons);
     }
@@ -71,8 +77,9 @@ public class MainActivity extends AppCompatActivity {
         int k;
         int comparisons = 0;
         int swaps = 0;
+        int aux = n;
         for (int m = 0; m < n; m++) {
-            for (int i = 0; i < n - 1; i++) {
+            for (int i = 0; i < aux-1; i++) {
                 k = i + 1;
                 comparisons++;
                 if (array[i] > array[k]) {
@@ -84,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             setIterationTexts(m+1, array);
-
+            aux--;
         }
         setSwapComparisonText(swaps, comparisons);
     }
@@ -103,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     swaps++;
                 }
             }
+
             setIterationTexts(i, input);
 
         }
@@ -110,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setIterationTexts(int iteration, int[] array){
+        
+
         String arrayText = "";
         for (int x = 0; x < array.length; x++){
             arrayText += array[x] + ", ";
