@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         bubbleSort(randomArray(10));
     }
 
-    public void sortInsertion(){
+    public void sortInsertion(View v){
+        iteracion.setText("");
         insertionSort(randomArray(10));
     }
 
@@ -96,22 +97,23 @@ public class MainActivity extends AppCompatActivity {
         setSwapComparisonText(swaps, comparisons);
     }
 
-    private void insertionSort(int[] input){
+    private void insertionSort(int[] array){
+        int n = array.length;
         int comparisons = 0;
         int swaps = 0;
         int temp;
-        for (int i = 1; i < input.length; i++) {
+        for (int i = 1; i < array.length; i++) {
             for(int j = i ; j > 0 ; j--){
                 comparisons++;
-                if(input[j-1] > input[j]){
-                    temp = input[j];
-                    input[j] = input[j-1];
-                    input[j-1] = temp;
+                if(array[j-1] > array[j]){
+                    temp = array[j];
+                    array[j] = array[j-1];
+                    array[j-1] = temp;
                     swaps++;
                 }
             }
 
-            setIterationTexts(i, input);
+            setIterationTexts(i, array);
 
         }
         setSwapComparisonText(swaps, comparisons);
