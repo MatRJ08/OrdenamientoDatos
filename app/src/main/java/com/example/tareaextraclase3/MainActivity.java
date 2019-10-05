@@ -14,8 +14,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView iteracion;
     private TextView swapsText;
     private TextView comparisonText;
+    private int loop = 0, comparisons = 0, swaps = 0, tempLoop, insertPos, smallerNumber;
+    private int[] array;
     private Random numberGenerator = new Random();
-    private Handler handler;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,26 +32,71 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sortSelection(View v){
-        selectionSort(randomArray(10));
+        clearTexts();
+        comparisons = 0;
+        swaps = 0;
+        loop = 0;
+        tempLoop = -1;
+        smallerNumber = -1;
+        randomArray(10);
+        selectionSort(0);
     }
 
     public void sortBubble(View v){
-        bubbleSort(randomArray(10));
+        clearTexts();
+        comparisons = 0;
+        swaps = 0;
+        loop = 0;
+        tempLoop = -1;
+        randomArray(10);
+        bubbleSort(0, 1);
     }
 
-    public void sortInsertion(){
-        insertionSort(randomArray(10));
+    public void sortInsertion(View v){
+        clearTexts();
+        comparisons = 0;
+        swaps = 0;
+        loop = 0;
+        tempLoop = -1;
+        insertPos = -1;
+        randomArray(10);
+        insertionSort(0);
     }
 
-    private int[] randomArray(int size){
+    private void randomArray(int size){
         int[] random = new int[size];
         for (int x = 0; x < random.length; x++){
             random[x] = numberGenerator.nextInt(100);
         }
-        return random;
+        this.array = random;
     }
 
-    private void selectionSort(int[] arr){
+    private void selectionSort(final int current){
+        setIterationTexts(loop, array);
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                if(loop != tempLoop) {
+                    setIterationTexts(loop, array);
+                }
+                tempLoop = loop;
+                comparisons++;
+                if (array[current] > array[smallerNumber]){
+                    swaps++;
+                    int temp = array[current];
+                    array[current] = array[smallerNumber];
+                    array[smallerNumber] = temp;
+                }
+
+                int n = current+1;
+                loop++;
+                if(n < array.length-1){
+                    selectionSort(n);
+                }
+            }
+        }, 300);
+
+        smallerNumber = getSmallerNumber(current+1);
+        setSwapComparisonText(this.swaps,this.comparisons);/*
         int comparisons = 0;
         int swaps = 0;
         for (int i = 0; i < arr.length - 1; i++){
@@ -64,34 +111,81 @@ public class MainActivity extends AppCompatActivity {
             arr[i] = smallerNumber;
             setIterationTexts(i, arr);
         }
-        setSwapComparisonText(swaps, comparisons);
+        setSwapComparisonText(swaps, comparisons);*/
     }
 
-    private void bubbleSort(int[] array){
-        int n = array.length;
-        int k;
-        int comparisons = 0;
-        int swaps = 0;
-        for (int m = 0; m < n; m++) {
-            for (int i = 0; i < n - 1; i++) {
-                k = i + 1;
+    private int getSmallerNumber(int currentNumber){
+        int smallerNumber = currentNumber;
+        for (int i = currentNumber+1; i<array.length; i++){
+            comparisons++;
+            if(array[i] < array[smallerNumber]){
+                smallerNumber = i;
+            }
+        }
+        return smallerNumber;
+    }
+
+    private void bubbleSort(final int a, final int b){
+        setIterationTexts(loop, array);
+        handler.postDelayed(new Runnable(){
+            public  void run(){
+                if(loop != tempLoop) {
+                    setIterationTexts(loop, array);
+                }
+                tempLoop = loop;
                 comparisons++;
-                if (array[i] > array[k]) {
+                if (array[a] > array[b]){
                     swaps++;
-                    int temp;
-                    temp = array[i];
-                    array[i] = array[k];
-                    array[k] = temp;
+                    int temp = array[a];
+                    array[a] = array[b];
+                    array[b] = temp;
+                }
+                int i = a+1;
+                int j = b+1;
+                if (j == array.length-loop){
+                    i = 0;
+                    j = i+1;
+                    loop++;
+                }
+                if(loop<array.length-1){
+                    bubbleSort(i, j);
+                }
+
+            }
+        }, 500);
+        setSwapComparisonText(this.swaps,this.comparisons);
+    }
+
+    private void insertionSort(final int current){
+        setIterationTexts(loop, array);
+        handler.postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                if(loop != tempLoop) {
+                    setIterationTexts(loop, array);
+                }
+                tempLoop = loop;
+                if (current != insertPos){
+                    int temp = array[current];
+                    comparisons++;
+                    for (int i = current; i > insertPos; i--){
+                        swaps++;
+                        array[i] = array[i-1];
+                    }
+                    array[insertPos] = temp;
+                }
+                int n = current+1;
+                loop++;
+                if(n<array.length){
+                    insertionSort(n);
                 }
             }
-            setIterationTexts(m+1, array);
+        }, 500);
 
-            }
-        setSwapComparisonText(swaps, comparisons);
-    }
+        insertPos = getInsertPos(current);
+        setSwapComparisonText(this.swaps,this.comparisons);
 
-    private void insertionSort(int[] input){
-        int comparisons = 0;
+        /*int comparisons = 0;
         int swaps = 0;
         int temp;
         for (int i = 1; i < input.length; i++) {
@@ -107,17 +201,35 @@ public class MainActivity extends AppCompatActivity {
             setIterationTexts(i, input);
 
         }
-        setSwapComparisonText(swaps, comparisons);
+        setSwapComparisonText(swaps, comparisons);*/
+    }
+
+    private int getInsertPos(int currentNumber){
+        int insertPosition = currentNumber;
+        for (int i = 0; i<=insertPosition; i++ ){
+            comparisons++;
+            if(array[i] > array[insertPosition]){
+                insertPosition = i;
+            }
+        }
+        return insertPosition;
     }
 
     private void setIterationTexts(int iteration, int[] array){
         String arrayText = "";
         for (int x = 0; x < array.length; x++){
-            arrayText += array[x] + ", ";
+            arrayText += array[x] + "  ";
         }
         numeroIteracion.setText("Iteración #" + iteration);
         iteracion.setText(arrayText);
 
+    }
+
+    private void clearTexts(){
+        numeroIteracion.setText("");
+        iteracion.setText("");
+        comparisonText.setText("");
+        swapsText.setText("");
     }
 
     private void setSwapComparisonText(int swaps, int comparisons){
