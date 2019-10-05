@@ -10,18 +10,18 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView numeroIteracion;
+    private TextView numsOrdenar;
     private TextView iteracion;
     private TextView swapsText;
     private TextView comparisonText;
     private Random numberGenerator = new Random();
-    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        numsOrdenar = findViewById(R.id.textNumsOrdenar);
         iteracion = findViewById(R.id.textDatos);
         comparisonText = findViewById(R.id.textComparisons);
         swapsText = findViewById(R.id.textSwaps);
@@ -45,8 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
     private int[] randomArray(int size){
         int[] random = new int[size];
+        numsOrdenar.setText("Numeros a ordenar: ");
         for (int x = 0; x < random.length; x++){
             random[x] = numberGenerator.nextInt(100);
+            numsOrdenar.setText(numsOrdenar.getText()+String.valueOf(random[x]));
+            if(x < random.length-1){
+                numsOrdenar.setText(numsOrdenar.getText()+", ");
+            }
         }
         return random;
     }
@@ -120,11 +125,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setIterationTexts(int iteration, int[] array){
-        
+
 
         String arrayText = "";
         for (int x = 0; x < array.length; x++){
-            arrayText += array[x] + ", ";
+            arrayText += array[x];
+            if(x < array.length -1){
+                arrayText += ", ";
+            }
         }
         iteracion.setText(iteracion.getText()+"Iteración #" +iteration+ ": "+arrayText+"\n\n");
 
