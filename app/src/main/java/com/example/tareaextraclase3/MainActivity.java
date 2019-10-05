@@ -83,21 +83,28 @@ public class MainActivity extends AppCompatActivity {
         int k;
         int comparisons = 0;
         int swaps = 0;
-        int aux = n;
+        int nAux = n;
+        boolean swaped = false;
         for (int m = 0; m < n; m++) {
-            for (int i = 0; i < aux-1; i++) {
+            for (int i = 0; i < nAux-1; i++) {
                 k = i + 1;
                 comparisons++;
                 if (array[i] > array[k]) {
+                    swaped = true;
                     swaps++;
-                    int temp;
-                    temp = array[i];
+                    int temp = array[i];
                     array[i] = array[k];
                     array[k] = temp;
                 }
             }
             setIterationTexts(m+1, array);
-            aux--;
+            if(!swaped){
+                break;
+            }else{
+                swaped = false;
+            }
+
+            nAux--;
         }
         setSwapComparisonText(swaps, comparisons);
     }
